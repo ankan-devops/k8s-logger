@@ -1,0 +1,27 @@
+#!/bin/sh
+read -r -p "Enter AWS Access Key: " AWS_KEY;
+stty -echo;
+read -r -p "Enter AWS Secret Key: " AWS_SECRET;
+stty echo; echo "";
+read -r -p "Enter AWS Region: " AWS_REG;
+read -r -p "Enter AWS EKS Cluster Name: " CLUSTER;
+# read -r -p "Enter Cluster Namespace to access: " SPACE;
+
+docker build -t k-logs -<<EOT
+FROM ubuntu:20.04
+RUN apt-get update && apt-get install curl unzip -y
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+RUN aws configure set aws_access_key_id "${AWS_KEY}"
+RUN aws configure set aws_secret_access_key "${AWS_SECRET}"
+RUN aws configure set default.region "${AWS_REG}"
+RUN aws configure set default.output json
+RUN curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl
+RUN chmod +x ./kubectl
+RUN mv ./kubectl /usr/bin/kubectl
+RUN aws eks --region ${AWS_REG} update-kubeconfig --name ${CLUSTER}
+ENTRYPOINT ["/bin/bash", "-c", "read -r -p 'Enter the cluster namespace to access: ' SPACE && DEP_LIST=( \$(kubectl get pods -n \${SPACE} -o custom-columns='NAME:.metadata.name' --no-headers) ) && echo '\nNUM  PODS' && for i in \${!DEP_LIST[@]}; do echo \$((i+1))'.   '\${DEP_LIST[i]}; done && echo '\nEnter a number (ex: 1..): ' && read POD && kubectl logs \${DEP_LIST[POD-1]} -n \${SPACE} --follow"]
+EOT
+
+echo "\nRun your K8s logger using -> 'sudo docker run -it --rm k-logs' \n";

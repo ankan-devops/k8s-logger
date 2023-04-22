@@ -1,0 +1,16 @@
+resources:
+  - eks-log-role-binding.yaml
+
+namespace:          # The namspace of the users where they are allowed to access the logs
+
+nameSuffix:         # The name suffix added on the Role & Role-Binding for tagging of the roles and role-binding namespace wise
+
+patchesJson6902:
+- target:
+    version: v1
+    kind: RoleBinding
+    name: read-pods
+  patch: |-
+    - op: replace
+      path: /subjects/0/name
+      value:       # The name of the AWS user added on k8s configmap with access to view the logs
