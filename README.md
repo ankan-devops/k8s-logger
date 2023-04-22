@@ -1,5 +1,5 @@
 # k8s-logger
-CLI logger for K8s clusters to display container logs of deployments. Intended for developers.
+CLI logger for K8s clusters to view console logs of codes. Intended for developers.
 ============================================================================
 
 
@@ -39,5 +39,5 @@ CLI logger for K8s clusters to display container logs of deployments. Intended f
 
 1. Run the command ***sudo docker run -it --rm k-logs***
 2. Enter the namespace the user/developer will access
-3. Enter the number from the list of pods to view it's logs
+3. Enter a number from the list of pods to view the console logs of that container
 --------------------------------------------------------------------------------------
