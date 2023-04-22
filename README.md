@@ -2,6 +2,7 @@
 CLI logger for K8s clusters to display container logs of deployments. Intended for developers.
 ============================================================================
 
+
 ## Prequisities for EKS Cluster Admin:
 
 ### Creating AWS users and adding RBAC rules for the users on K8s to view container logs:-
@@ -16,6 +17,8 @@ CLI logger for K8s clusters to display container logs of deployments. Intended f
     * The name of the AWS user added on k8s configmap to view the logs
 5. Finally, run *kubectl apply -k \<path to this folder\>*
 --------------------------------------------------------------------------------------
+
+
 
 ## Setting up the Logger on User/Developer end
 
@@ -32,7 +35,7 @@ CLI logger for K8s clusters to display container logs of deployments. Intended f
 2. Run the **./k8s-logger** bash file
 3. Enter the values asked for in the cmd-line prompts
 
-## Running the Logger
+### Running the Logger
 
 1. Run the command ***sudo docker run -it --rm k-logs***
 2. Enter the namespace the user/developer will access
